@@ -1,42 +1,36 @@
-import configparser
-
 import spotipy
-import spotipy.oauth2 as oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
 
+client_credentials_manager = SpotifyClientCredentials(client_id='ccf3be6f194a4ad39f642e580cbd6119', client_secret='5041921bd96341cab9ea9b53aa8ea0d8')
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-config = configparser.ConfigParser()
-config.read('config.cfg')
-client_id = config.get('SPOTIFY', 'CLIENT_ID')
-client_secret = config.get('SPOTIFY', 'CLIENT_SECRET')
+api_uri = 'spotify:artist:1kfWoWgCugPkyxQP8lkRlY'
+# results = sp.artist_albums(api_url, album_type='album')
+# albums = results['items']
+results = sp.artist_top_tracks(api_uri)
+print('results ', results)
 
-auth = oauth2.SpotifyClientCredentials(
-    client_id=client_id,
-    client_secret=client_secret
-)
-
-token = auth.get_access_token()
-spotify = spotipy.Spotify(auth=token)
-
-birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
-# spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-
-results = spotify.artist_albums(birdy_uri, album_type='album')
-albums = results['items']
-while results['next']:
-    results = spotify.next(results)
-    albums.extend(results['items'])
-
-for album in albums:
-    print(album['name'])
+for track in results['tracks'][:10]:
+    print('track    : ' + track['name'])
+    print('audio    : ' + track['preview_url'])
+    print('cover art: ' + track['album']['images'][0]['url'])
+    print()
 
 
 
-
-
-# def print_hi(name):
-#     print(f'Hi, {name}')
+# import configparser
+# import spotipy
+# import spotipy.oauth2 as oauth2
+# from spotipy.oauth2 import SpotifyClientCredentials
 #
-# if __name__ == '__main__':
-#     print_hi('PyCharm')
-
+#
+# config = configparser.ConfigParser()
+# config.read('config.cfg')
+# client_id = config.get('SPOTIFY', 'CLIENT_ID')
+# client_secret = config.get('SPOTIFY', 'CLIENT_SECRET')
+#
+# auth = oauth2.SpotifyClientCredentials(
+#     client_id=client_id,
+#     client_secret=client_secret
+# )
+#
