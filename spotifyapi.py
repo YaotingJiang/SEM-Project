@@ -11,6 +11,7 @@ client_secret = config.get('SPOTIFY', 'CLIENT_SECRET')
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+# example json response
 episode = sp.search(q='data',
                     type='episode',
                     market='US',
@@ -19,9 +20,10 @@ episode = sp.search(q='data',
 
 print(json.dumps(episode, indent=2))
 
+# Get list episodes based on the queries and the input number
+# It will generate at most 50 episodes
 def get_episodes(queries, total):
     name = []
-    # description = []
     duration = []
     explicit = []
     language = []
@@ -43,7 +45,6 @@ def get_episodes(queries, total):
                                 offset=i)
             for i, t in enumerate(results['episodes']['items']):
                 name.append(t['name'])
-                # description.append(t['description'])
                 duration.append(t['duration_ms'])
                 explicit.append(t['explicit'])
                 language.append(t['language'])
@@ -64,21 +65,14 @@ def get_episodes(queries, total):
                               }).drop_duplicates().reset_index(drop = True)
 
     return dataframe
-    # json.dumps(results)
-    # print('-------------------------------------------------------------------------------------------')
-    # print(json.dumps(results))
-    # for r in results:
-    #     # print(r['episodes']['items'][9]["name"])
-    #     print(json.dumps(r['episodes']['items'][0]['audio_preview_url'], indent=2))
 
-print(get_episodes(['sad'], 2))
+print(get_episodes(['a, b, c'], 10))
 
 
 
 def get_top_10_tracks():
     api_url = 'spotify:artist:1kfWoWgCugPkyxQP8lkRlY'
     results = sp.artist_top_tracks(api_url)
-    # albums = results['items']
     print('results ', results)
 
     for track in results['tracks'][:10]:
