@@ -1,9 +1,9 @@
 import configparser
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import json
 import pandas as pd
 
+# Set client secret and client id
 config = configparser.ConfigParser()
 config.read('config.cfg')
 client_id = config.get('SPOTIFY', 'CLIENT_ID')
@@ -12,13 +12,13 @@ client_credentials_manager = SpotifyClientCredentials(client_id=client_id, clien
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # example json response
-episode = sp.search(q='data',
-                    type='episode',
-                    market='US',
-                    limit=1,
-                    offset=0)
-
-print(json.dumps(episode, indent=2))
+# episode = sp.search(q='data',
+#                     type='episode',
+#                     market='US',
+#                     limit=1,
+#                     offset=0)
+#
+# print(json.dumps(episode, indent=2))
 
 # Get list episodes based on the queries and the input number
 # It will generate at most 50 episodes
@@ -66,19 +66,4 @@ def get_episodes(queries, total):
 
     return dataframe
 
-print(get_episodes(['a, b, c'], 10))
-
-
-
-def get_top_10_tracks():
-    api_url = 'spotify:artist:1kfWoWgCugPkyxQP8lkRlY'
-    results = sp.artist_top_tracks(api_url)
-    print('results ', results)
-
-    for track in results['tracks'][:10]:
-        print('track    : ' + track['name'])
-        print('audio    : ' + track['preview_url'])
-        print('cover art: ' + track['album']['images'][0]['url'])
-        print()
-
-get_top_10_tracks()
+# print(get_episodes('a', 10))
